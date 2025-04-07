@@ -2,8 +2,8 @@
 
 // Tracks the attempts the user does to display and check for win.
 let attempts = 0;
-let hintAttempts = 0;
 let successfulAttempts = 0;
+let wrongAttempts = 0;
 
 // Defines variables for commonly used Document IDs
 let gameDisplay = document.getElementById("grid-container");
@@ -15,6 +15,17 @@ let colors = [];
 let colorsChosen = [];
 let checkColor = "";
 let difficulty;
+
+// Music Selection
+
+let happymusic = document.getElementById('happymusic')
+let angrymusic = document.getElementById('angrymusic')
+let wrongsfx = document.getElementById('wrongsfx')
+let correctsfx = document.getElementById('correctsfx')
+
+
+// End of Global Variables ---- Start of Difficulty Pick Function
+
 
 // Picking Difficulty -- Displays the difficulty buttons and populates the word bank.
 
@@ -369,16 +380,24 @@ function continueGame() {
 
   gameDisplay.style.filter = "none";
   gameDisplay.style.transition = "filter 0.2s";
+  happymusic.play() // starts happy music
+}
+
+// Change music when man is angry
+function changeMusic() {
+  console.log("change music passed")
+  happymusic.pause()
+  angrymusic.play()
+
 }
 
 // Display colors -- This setups all the words in the word bank.
-
 function colorDisplay() {
   // This portion creates a new array that is only names and alphabetical. Easier to read the word bank for user.
   let colorsSorted = colors.map((color) => color.name);
   colorsSorted = colorsSorted.sort();
 
-  colorsSorted.forEach((color) => {
+  colorsSorted.forEach((color) => { // Actually displays the words in the bank using array above
     document.getElementById("wordBank").innerHTML += `${color} <br>`;
   });
 
@@ -386,7 +405,6 @@ function colorDisplay() {
 }
 
 // Randomize Colors -- Selects 3 colors at random in the 'colors' array.
-
 function colorRandomizer() {
   for (let i = 0; i < 3; i++) {
     // <-- Three times, select a random color object in the color array.
@@ -401,8 +419,39 @@ function colorRandomizer() {
   hintGenerator()
 }
 
-// This Event Listener here is a short bit of code that allows the user to press the 'Enter' key instead of the on-screen button.
+// Creates the hints on the bottom
+function hintGenerator() {
+  for (let i = 0 ; i < 3; i++) {
+    console.log("Hint loop started")
+    console.log(i)
+    console.log(colorsChosen[i])
+    if (colorsChosen[i].name === "king von") {
+      // If the color is king von, do these special instructions:
+      document.getElementById("colorBlocks").innerHTML += `
+                <img src="kingvon.jpeg" alt ='king von' style="width: 100px; height: 100px;">
+            `;
+    } else if (colorsChosen[i].name === "4i√3") {
+      // If the color is the math, do these special instructions:
+      document.getElementById("colorBlocks").innerHTML += `
+                <img src="math.png" alt ='answer' style="width: 100px; height: 100px;">
+            `;
+    } else if (colorsChosen[i].name === "big mac meal") {
+      // If the color is big mac meal, do these special instructions:
+      document.getElementById("colorBlocks").innerHTML += `
+                <img src="bigmac.png" alt ='big mac meal' style="width: 100px; height: 100px;">
+            `;
+    }
 
+    else {
+      let color = colorsChosen[i];
+      document.getElementById("colorBlocks").innerHTML += `
+              <div style="background-color: ${color.colorCSS}" class="colorBlock" id="${color.name}"></div>
+          `;
+    }
+  }
+  }
+
+// This Event Listener here is a short bit of code that allows the user to press the 'Enter' key instead of the on-screen button.
 document
   .getElementById("colorInput")
   .addEventListener("keypress", function (event) {
@@ -457,7 +506,7 @@ function colorChecker() {
         "result"
       ).innerHTML = `You got the color ${colorInput}!`;
 
-
+        correctsfx.play()
 
       // This labelles the hint blocks below so you know which color you got.
       console.log("Color Input ID Div:", document.getElementById(colorInput))
@@ -466,7 +515,7 @@ function colorChecker() {
 
 
 
-        if (colorInput !== "king von") {
+        if (colorInput !== "king von") { // This is the start of nested loops checking if the color is NOT an image.
           console.log("Passed king von test")
           if (colorInput !== "big mac meal") {
             console.log("Passed big mac test")
@@ -486,9 +535,13 @@ function colorChecker() {
     }
     } else {
       // <-- If color is not right, notify user.
+
+      wrongAttempts++
+      console.log("Wrong attempts", wrongAttempts)
       document.getElementById(
         "result"
       ).innerHTML = `You did not get the color...`;
+      wrongsfx.play()
     }
   }
 
@@ -497,50 +550,6 @@ function colorChecker() {
   console.log("Attempts:", attempts);
   checkWin(); // <-- Check if user won
 }
-
-// Creating hints by giving color
-
-
-
-  function hintGenerator() {
-    for (let i = 0 ; i < 3; i++) {
-      console.log("Hint loop started")
-      console.log(i)
-      console.log(colorsChosen[i])
-      if (colorsChosen[i].name === "king von") {
-        // If the color is king von, do these special instructions:
-        document.getElementById("colorBlocks").innerHTML += `
-                  <img src="kingvon.jpeg" alt ='king von' style="width: 100px; height: 100px;">
-              `;
-    
-        hintAttempts++;
-        console.log(hintAttempts);
-      } else if (colorsChosen[i].name === "4i√3") {
-        // If the color is the math, do these special instructions:
-        document.getElementById("colorBlocks").innerHTML += `
-                  <img src="math.png" alt ='answer' style="width: 100px; height: 100px;">
-              `;
-    
-        hintAttempts++;
-        console.log(hintAttempts);
-      } else if (colorsChosen[i].name === "big mac meal") {
-        // If the color is big mac meal, do these special instructions:
-        document.getElementById("colorBlocks").innerHTML += `
-                  <img src="bigmac.png" alt ='big mac meal' style="width: 100px; height: 100px;">
-              `;
-    
-        hintAttempts++;
-        console.log(hintAttempts);
-      }
-
-      else {
-        let color = colorsChosen[i];
-        document.getElementById("colorBlocks").innerHTML += `
-                <div style="background-color: ${color.colorCSS}" class="colorBlock" id="${color.name}"></div>
-            `;
-      }
-    }
-    }
 
 // You Win Screen
 function checkWin() {
@@ -552,6 +561,9 @@ function checkWin() {
 
     // Style of the youWin box -- Sets youWin container from 'none' to 'flex' so it shows up.
     winStyle.style.display = "flex";
+
+    angrymusic.pause()
+    happymusic.play()
   }
 }
 
@@ -561,7 +573,7 @@ function tryAgain() {
   window.location.reload();
 }
 
-// Walter White?????
+// Man Commentary
 
 function manCommentary(color) {
   if (color === "") {
@@ -599,11 +611,12 @@ function manCommentary(color) {
         document.getElementById("wordBank").style.fontSize = "1.6em";
       }
 
-      if (attempts > 14) {
+      if (attempts >= 15) {
         document.getElementById(
           "img-container"
-        ).innerHTML = `<img src="veryangry.jpg" alt= "man angry" id = "man" style="width: 50%;">`;
+        ).innerHTML = `<img src="veryangry.jpg" alt= "man very angry" id = "man" style="width: 50%;">`;
         document.getElementById("wordBank").style.fontSize = "1.6em";
+        commentary.innerHTML = `I WISH YOU THE BEST OF LUCK, USER! 😡😡`;
       }
 
       if (attempts === 1) {
@@ -623,6 +636,7 @@ function manCommentary(color) {
 
       if (attempts === 4) {
         commentary.innerHTML = `Four attempts... <span style="color: red; font-weight: bold;">Are you colorblind?</span>`;
+        changeMusic()
       }
 
       if (attempts === 5) {
@@ -651,13 +665,18 @@ function manCommentary(color) {
       }
 
       if (attempts === 15) {
-        document.getElementById("wordBank").innerHTML = "";
 
-        let colorsOriginal = colors;
+        // This is a special bit of code.
+        // At 15 attempts, the man gets so mad he reveals the colors to you.
 
+        document.getElementById("wordBank").innerHTML = ""; // Gets rid of the words in the bank
+
+        let colorsOriginal = colors; // The ORIGINAL colors
+
+        // In the randomizer function, we took away colors chosen from the 'colors' array to prevent double picks. We are adding them back to restore all colors.
         colorsChosen.forEach((color) => colorsOriginal.unshift(color));
 
-        colorsOriginal = colorsOriginal.sort(function (a, b) {
+        colorsOriginal = colorsOriginal.sort(function (a, b) { // The sort function doesn't work so straight foward with objects, so we have to compare numbers.
           if (a.name < b.name) {
             return -1;
           } else if (a.name > b.name) {
@@ -668,19 +687,17 @@ function manCommentary(color) {
         });
         console.log(colorsOriginal);
 
-        colorsOriginal.forEach((color) => {
+        colorsOriginal.forEach((color) => { // This adds all the colors back with their color boxes beside them.
           document.getElementById(
             "wordBank"
           ).innerHTML += `<div class= "attemptBox"style="background-color: ${color.colorCSS}"></div> ${color.name} <br>`;
         });
 
-        if (difficulty === "hard") {
+        if (difficulty === "hard") { // Adds warning for images
           document.getElementById(
             "wordBank"
-          ).innerHTML += `<div style="font-size: 1rem; color: red; text-align: center;"> ⚠ Please note some 'colors' won't be shown because they're pictures. ⚠</div>`;
+          ).innerHTML += `<div style="font-size: 1rem; color: red; text-align: center;"> ⚠ Please note some 'colors' won't be shown <br>because they're pictures. ⚠</div>`;
         }
-
-        commentary.innerHTML = `THERE. NO MORE HINTS. NO MORE ME. <br> Just know the pictures don't have colors.`;
       }
     }
   }
