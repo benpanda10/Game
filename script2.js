@@ -246,6 +246,11 @@ function difficultyPick(level) {
         name: "saddle brown",
         colorCSS: "saddlebrown",
       },
+
+      {
+        name: "dandelion",
+        colorCSS: "#FDD156"
+      }
     ];
   }
 
@@ -360,6 +365,56 @@ function difficultyPick(level) {
         name: "fuzzy wuzzy",
         colorCSS: "#cc6666",
       },
+
+      {
+        name: "west-mec orange",
+        colorCSS: "#e79f2a"
+      },
+
+      {
+        name: "arizona dirt",
+        colorCSS: "#e8be8e"
+      },
+
+      {
+        name: "fear from inside out",
+        colorCSS: "#c084e8"
+      },
+
+      {
+        name: "#ab8b4f (the color code)",
+        colorCSS: "#ab8b4f"
+      },
+
+      {
+        name: "atlantic ocean blue",
+        colorCSS: "#4e797c"
+      },
+
+      {
+        name: "pacific ocean blue",
+        colorCSS: "#4a6979"
+      },
+
+      {
+        name: "goku's gi",
+        colorCSS: "#f3a722"
+      },
+
+      {
+        name: "ao",
+        colorCSS: "#008000"
+      },
+
+      {
+        name: "permanent geranium lake",
+        colorCSS: "#e12c2c"
+      },
+
+      {
+        name: "faux-medium aquamarine",
+        colorCSS: "#55e19e"
+      }
     ];
   }
 
@@ -618,6 +673,16 @@ function manCommentary(color) {
         document.getElementById("wordBank").style.fontSize = "1.6em";
         commentary.innerHTML = `I WISH YOU THE BEST OF LUCK, USER! 😡😡`;
       }
+
+      if (attempts >= 100) {
+        background = document.getElementById('background');
+        document.getElementById('img-container').innerHTML = `<img src="goku1.jpg" alt="goku 1">`
+        commentary.innerHTML = "So I heard you're strong."
+        background.style.background = "black"
+        document.getElementById('nameTitle').style.color = "white"
+      }
+
+
 
       if (attempts === 1) {
         commentary.innerHTML =
