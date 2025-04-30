@@ -262,7 +262,7 @@ function difficultyPick(level) {
 
     colors = [
       {
-        name: "squirt yellow",
+        name: "lemonade",
         colorCSS: "#f8e432",
       },
 
